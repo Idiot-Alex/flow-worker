@@ -1,4 +1,4 @@
 spring:
   datasource:
-    url: jdbc:duckdb:
+    url: jdbc:duckdb:db/flow.db
     driver-class-name: org.duckdb.DuckDBDriver
