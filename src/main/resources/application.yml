@@ -1,0 +1,4 @@
+spring:
+  datasource:
+    url: jdbc:duckdb:
+    driver-class-name: org.duckdb.DuckDBDriver
