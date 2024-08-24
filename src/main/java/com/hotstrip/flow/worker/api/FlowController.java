@@ -1,4 +1,4 @@
-package com.hostrip.flow.worker.api;
+package com.hotstrip.flow.worker.api;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

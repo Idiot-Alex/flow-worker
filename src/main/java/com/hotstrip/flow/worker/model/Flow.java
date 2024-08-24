@@ -1,4 +1,4 @@
-package com.hostrip.flow.worker.model;
+package com.hotstrip.flow.worker.model;
 
 import lombok.Data;
 

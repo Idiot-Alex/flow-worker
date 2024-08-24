@@ -1,16 +1,21 @@
 spring:
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
   datasource:
     url: jdbc:duckdb:db/flow.db
     driver-class-name: org.duckdb.DuckDBDriver
-  sql:
-    init:
-      mode: always
-      enabled: true
-      schema-locations: 
-        - classpath:db/schema.sql
-      data-locations: 
-        # - classpath:db/data.sql
-      continue-on-error: false
+  # sql:
+  #   init:
+  #     mode: always
+  #     enabled: true
+  #     schema-locations: 
+  #       - classpath:db/schema.sql
+  #     data-locations: 
+  #       # - classpath:db/data.sql
+  #     continue-on-error: false
 
 # mybatis
 mybatis:

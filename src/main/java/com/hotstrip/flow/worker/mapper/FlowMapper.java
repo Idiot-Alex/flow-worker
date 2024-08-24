@@ -1,9 +1,10 @@
-package com.hostrip.flow.worker.mapper;
+package com.hotstrip.flow.worker.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
-import com.hostrip.flow.worker.model.Flow;
+import com.hotstrip.flow.worker.model.Flow;
+
 
 @Mapper
 public interface FlowMapper {

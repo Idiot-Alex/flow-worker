@@ -24,7 +24,7 @@
     </root>
 
     <!-- 控制台输出 DEBUG 级别日志 -->
-    <!-- <logger name="org.springframework.boot" level="DEBUG" additivity="false">
+    <logger name="org.flywaydb" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT" />
-    </logger> -->
+    </logger>
 </configuration>

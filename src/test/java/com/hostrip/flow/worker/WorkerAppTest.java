@@ -5,8 +5,8 @@ import javax.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.hostrip.flow.worker.mapper.FlowMapper;
-import com.hostrip.flow.worker.model.Flow;
+import com.hotstrip.flow.worker.mapper.FlowMapper;
+import com.hotstrip.flow.worker.model.Flow;
 
 import lombok.extern.slf4j.Slf4j;
 
