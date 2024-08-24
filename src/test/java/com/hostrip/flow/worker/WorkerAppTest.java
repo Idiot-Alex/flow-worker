@@ -2,6 +2,7 @@ package com.hostrip.flow.worker;
 
 import javax.annotation.Resource;
 
+import com.hotstrip.flow.worker.WorkerApp;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -11,7 +12,7 @@ import com.hotstrip.flow.worker.model.Flow;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@SpringBootTest
+@SpringBootTest(classes = WorkerApp.class)
 public class WorkerAppTest {
     @Resource
     private FlowMapper flowMapper;
