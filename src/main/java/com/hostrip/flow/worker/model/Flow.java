@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class Flow {
-  private String id;
+  private Long id;
   private String name;
 }
