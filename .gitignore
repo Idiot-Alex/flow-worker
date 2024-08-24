@@ -31,3 +31,8 @@ target/
 .idea/
 
 logs/
+
+colorimage/
+tplcolor/
+tplimage/
+nodeimage/
