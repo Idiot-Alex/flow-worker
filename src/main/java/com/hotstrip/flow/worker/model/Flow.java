@@ -10,11 +10,14 @@ import lombok.Data;
 @Data
 @Entity.Table(value = "flow")
 public class Flow {
-  @Entity.Column(id = true)
+  @Entity.Column(value = "id", id = true)
   private Long id;
+  @Entity.Column(value = "name")
   private String name;
-  @Entity.Column(typeHandler = BlobToStringTypeHandler.class)
+  @Entity.Column(value = "json_data", typeHandler = BlobToStringTypeHandler.class)
   private String jsonData;
+  @Entity.Column(value = "created_at")
   private Date createdAt;
+  @Entity.Column(value = "updated_at")
   private Date updatedAt;
 }
