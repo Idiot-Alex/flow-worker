@@ -55,6 +55,7 @@ public class DuckDBSchema extends Schema<DuckDBDatabase, DuckDBTable> {
 
   @Override
   protected DuckDBTable[] doAllTables() throws SQLException {
+    // use `PRAGMA show_tables;` as same to get all tables, but it's contans view and table
     List<String> tableNames = jdbcTemplate.queryForStringList("SELECT table_name FROM information_schema.tables WHERE table_schema = '" + name + "'");
 
     DuckDBTable[] tables = new DuckDBTable[tableNames.size()];

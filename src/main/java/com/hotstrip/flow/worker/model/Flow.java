@@ -16,8 +16,8 @@ public class Flow {
   private String name;
   @Entity.Column(value = "json_data", typeHandler = BlobToStringTypeHandler.class)
   private String jsonData;
-  @Entity.Column(value = "created_at")
+  @Entity.Column(value = "created_at", updatable = false)
   private Date createdAt;
-  @Entity.Column(value = "updated_at")
+  @Entity.Column(value = "updated_at", insertable = false)
   private Date updatedAt;
 }
