@@ -7,19 +7,11 @@ spring:
   datasource:
     url: jdbc:duckdb:db/flow.db
     driver-class-name: org.duckdb.DuckDBDriver
-  # sql:
-  #   init:
-  #     mode: always
-  #     enabled: true
-  #     schema-locations: 
-  #       - classpath:db/schema.sql
-  #     data-locations: 
-  #       # - classpath:db/data.sql
-  #     continue-on-error: false
 
 # mybatis
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.hostrip.flow.worker.model
+  type-handlers-package: com.hotstrip.flow.worker.typehandler
   configuration:
     map-underscore-to-camel-case: true
