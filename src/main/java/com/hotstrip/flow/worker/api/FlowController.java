@@ -34,10 +34,28 @@ public class FlowController {
             return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(R.error("Json data is required"));
         }
 
-        Flow res = flowService.save(flow);
-        log.info("save flow success, flow: {}", JSONUtil.toJsonStr(res));
+        if (flow.getId() == null) {
+            // query flow by id
+            Flow res = flowService.findById(flow.getId());
+            if (res == null) {
+                // return error
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(R.error("flow not found"));
+            }
+            // update flow
+            res = flowService.update(flow);
+            log.info("update flow success, flow: {}", JSONUtil.toJsonStr(res));
+        } else {
+            // insert flow
+            Flow res = flowService.save(flow);
+            log.info("save flow success, flow: {}", JSONUtil.toJsonStr(res));
+        }
         return ResponseEntity.ok(R.ok("Flow saved successfully"));
     }
 
-
+    // delete flow
+    @PostMapping("/api/flow/delete")
+    public ResponseEntity<R> deleteFlow(@RequestBody Flow flow) {
+        flowService.deleteById(flow.getId());
+        return ResponseEntity.ok(R.ok("Flow deleted successfully"));
+    }
 }
