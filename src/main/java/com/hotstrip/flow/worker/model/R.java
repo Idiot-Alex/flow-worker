@@ -23,12 +23,20 @@ public class R {
     return init("ok", msg, data);
   }
 
+  public static R ok(String msg) {
+    return init("ok", msg, null);
+  }
+
   public static R ok(Object data) {
     return init("ok", "success", data);
+  }
+
+  public static R error(String msg) {
+    return init("error", msg, null);
   }
 
   public static R error(String msg, Object data) {
     return init("error", msg, data);
   }
-  
+
 }
