@@ -15,3 +15,9 @@ mybatis:
   type-handlers-package: com.hotstrip.flow.worker.typehandler
   configuration:
     map-underscore-to-camel-case: true
+
+# pagehelper
+pagehelper:
+  helper-dialect: duckdb
+  dialectAlias: duckdb=com.github.pagehelper.dialect.helper.MySqlDialect
+  reasonable: true

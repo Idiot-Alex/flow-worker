@@ -1,7 +1,6 @@
 package com.hotstrip.flow.worker.api;
 
 import java.util.Date;
-
 import javax.annotation.Resource;
 
 import org.junit.jupiter.api.Assertions;
@@ -39,5 +38,15 @@ public class FlowControllerTest extends WorkerAppTest {
 
     // 验证响应体是否为 "Flow saved successfully"
     Assertions.assertEquals("Flow saved successfully", response.getBody());
+  }
+
+  @Test
+  public void testListFlow() {
+    Flow flow = new Flow();
+    flow.setName("testFlow");
+
+    // 发送 POST 请求到 /api/flow/list
+    ResponseEntity<String> response = restTemplate.postForEntity("/api/flow/list?page=1&size=10", flow, String.class);
+    log.info("response: {}", response);
   }
 }

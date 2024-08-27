@@ -1,5 +1,6 @@
 package com.hotstrip.flow.worker.service;
 
+import com.github.pagehelper.Page;
 import com.hotstrip.flow.worker.model.Flow;
 
 /**
@@ -39,5 +40,15 @@ public interface FLowService {
    * @return 实体
    */
   Flow findById(Long id);
+
+  /**
+   * 分页查询
+   *
+   * @param page 页码
+   * @param size 每页大小
+   * @param info 查询条件
+   * @return 分页结果
+   */
+  Page<Flow> findByPage(int page, int size, Flow info);
 
 }

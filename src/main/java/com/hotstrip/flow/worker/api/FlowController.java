@@ -4,10 +4,13 @@ import javax.annotation.Resource;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.Page;
 import com.hotstrip.flow.worker.model.Flow;
 import com.hotstrip.flow.worker.model.R;
 import com.hotstrip.flow.worker.service.FLowService;
@@ -52,10 +55,21 @@ public class FlowController {
         return ResponseEntity.ok(R.ok("Flow saved successfully"));
     }
 
-    // delete flow
-    @PostMapping("/api/flow/delete")
-    public ResponseEntity<R> deleteFlow(@RequestBody Flow flow) {
-        flowService.deleteById(flow.getId());
-        return ResponseEntity.ok(R.ok("Flow deleted successfully"));
+    // delete flow by id
+    @PostMapping("/api/flow/delete/{id}")
+    public ResponseEntity<R> deleteFlow(@PathVariable("id") Long id) {
+        int rows = flowService.deleteById(id);
+        if (rows > 0) {
+            return ResponseEntity.ok(R.ok("Flow deleted successfully"));
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(R.error("Flow deleted failed"));
+        }
+    }
+
+    // query flow with page
+    @PostMapping("/api/flow/list")
+    public ResponseEntity<R> listFlow(@RequestParam int page, @RequestParam int size, @RequestBody Flow info) {
+        Page<Flow> list = flowService.findByPage(page, size, info);
+        return ResponseEntity.ok(R.ok("Flow query success", list));
     }
 }
