@@ -1,6 +1,8 @@
 package com.hotstrip.flow.worker.env.java;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.hotstrip.flow.worker.env.Env;
 import com.hotstrip.flow.worker.env.EnvStrategy;
@@ -30,11 +32,12 @@ public class WindowsJavaEnv implements EnvStrategy {
 
   @Override
   public String version() {
-    String res = RuntimeUtil.execForStr("java -version");
-    log.info("get java version: {}", res);
-    String versionMatch = res.replaceAll("\"", "").split("version")[1].trim();
-    if (versionMatch != null && !versionMatch.isEmpty()) {
-      return versionMatch;
+    String versionOutput = RuntimeUtil.execForStr("java -version");
+    log.info("get java version: {}", versionOutput);
+    Pattern pattern = Pattern.compile("version \"([^\"]+)\"");
+    Matcher matcher = pattern.matcher(versionOutput);
+    if (matcher.find()) {
+      return matcher.group(1);
     } else {
       System.err.println("Failed to get JDK version.");
       return null;
