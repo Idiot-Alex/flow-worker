@@ -34,8 +34,8 @@ public class GitEnvTest extends WorkerAppTest {
     String path = gitEnv.path();
     log.info("path: {}", path);
 
-    List<String> list = RuntimeUtil.execForLines("which git");
-    log.info(JSONUtil.toJsonStr(list));
+    Process process = RuntimeUtil.exec("which git");
+    log.info(JSONUtil.toJsonStr(process));
 
     // Process process = RuntimeUtil.exec("which git");
   }

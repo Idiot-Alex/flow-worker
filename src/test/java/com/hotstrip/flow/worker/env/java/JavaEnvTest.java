@@ -32,6 +32,7 @@ public class JavaEnvTest extends WorkerAppTest {
 
   @Test
   void testVersion() {
-
+    String version = javaEnv.version();
+    log.info("java version: {}", version);
   }
 }
