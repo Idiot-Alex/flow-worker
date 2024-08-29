@@ -27,7 +27,7 @@ public class WindowsMavenEnv implements EnvStrategy {
     if (res != null && res.size() > 0) {
       String path = res.get(0);
       if (FileUtil.exist(path)) {
-        return path;
+        return path.trim();
       } else {
         log.error("The mvn path is invalid: {}", path);
         return null;

@@ -22,7 +22,7 @@ public class LinuxMavenEnv implements EnvStrategy {
 
   @Override
   public String path() {
-    return RuntimeUtil.execForStr("which mvn");
+    return RuntimeUtil.execForStr("which mvn").trim();
   }
 
   @Override

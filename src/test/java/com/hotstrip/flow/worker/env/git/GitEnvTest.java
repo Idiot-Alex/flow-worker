@@ -1,14 +1,10 @@
 package com.hotstrip.flow.worker.env.git;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.junit.jupiter.api.Test;
 
 import com.hostrip.flow.worker.WorkerAppTest;
-import com.hotstrip.flow.worker.env.git.GitEnv;
-
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +17,7 @@ public class GitEnvTest extends WorkerAppTest {
 
   @Test
   void testInfo() {
-
+    log.info("git info: {}", gitEnv.info());
   }
 
   @Test

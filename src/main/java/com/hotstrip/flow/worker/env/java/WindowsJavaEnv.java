@@ -22,7 +22,7 @@ public class WindowsJavaEnv implements EnvStrategy {
     log.info("get java path: {}", res);
     // 可能会有多个java路径，取第一个
     if (res != null && res.size() > 0) {
-      return res.get(0);
+      return res.get(0).trim();
     } else {
       return null;
     }

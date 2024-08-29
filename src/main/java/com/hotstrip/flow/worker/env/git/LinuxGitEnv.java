@@ -14,7 +14,7 @@ public class LinuxGitEnv implements EnvStrategy {
 
   @Override
   public String path() {
-    return RuntimeUtil.execForStr("which git");
+    return RuntimeUtil.execForStr("which git").trim();
   }
 
   @Override

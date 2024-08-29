@@ -16,7 +16,7 @@ public class MavenEnvTest extends WorkerAppTest {
 
   @Test
   void testInfo() {
-
+    log.info("maven info: {}", mavenEnv.info());
   }
 
   @Test

@@ -17,7 +17,7 @@ public class LinuxJavaEnv implements EnvStrategy {
 
   @Override
   public String path() {
-    return RuntimeUtil.execForStr("which java");
+    return RuntimeUtil.execForStr("which java").trim();
   }
 
   @Override

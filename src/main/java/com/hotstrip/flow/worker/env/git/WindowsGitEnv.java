@@ -14,7 +14,7 @@ public class WindowsGitEnv implements EnvStrategy {
 
   @Override
   public String path() {
-    return RuntimeUtil.execForStr("where git");
+    return RuntimeUtil.execForStr("where git").trim();
   }
 
   @Override
