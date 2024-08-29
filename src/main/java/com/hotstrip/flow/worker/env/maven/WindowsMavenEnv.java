@@ -1,4 +1,4 @@
-package com.hotstrip.flow.worker.env.java;
+package com.hotstrip.flow.worker.env.maven;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,28 +7,30 @@ import com.hotstrip.flow.worker.env.Env;
 import com.hotstrip.flow.worker.env.EnvStrategy;
 
 import cn.hutool.core.util.RuntimeUtil;
+import lombok.extern.slf4j.Slf4j;
 
-public class LinuxJavaEnv implements EnvStrategy {
+@Slf4j
+public class WindowsMavenEnv implements EnvStrategy {
 
   @Override
   public String name() {
-    return "java";
+    return "maven";
   }
 
   @Override
   public String path() {
-    return RuntimeUtil.execForStr("which java");
+    return RuntimeUtil.execForStr("where mvn");
   }
 
   @Override
   public String version() {
-    String versionOutput = RuntimeUtil.execForStr("java -version");
-    Pattern pattern = Pattern.compile("version \"([^\"]+)\"");
+    String versionOutput = RuntimeUtil.execForStr("mvn -v");
+    Pattern pattern = Pattern.compile("Apache Maven (\\S+)");
     Matcher matcher = pattern.matcher(versionOutput);
     if (matcher.find()) {
       return matcher.group(1);
     } else {
-      System.err.println("Failed to get JDK version.");
+      log.error("Failed to get Maven version.");
       return null;
     }
   }
