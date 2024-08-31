@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pagehelper.Page;
 import com.hotstrip.flow.worker.model.Flow;
 import com.hotstrip.flow.worker.model.R;
+import com.hotstrip.flow.worker.model.RMap;
 import com.hotstrip.flow.worker.service.FLowService;
 
 import cn.hutool.core.util.StrUtil;
@@ -68,8 +69,10 @@ public class FlowController {
 
     // query flow with page
     @PostMapping("/api/flow/list")
-    public ResponseEntity<R> listFlow(@RequestParam int page, @RequestParam int size, @RequestBody Flow info) {
+    public ResponseEntity<RMap> listFlow(@RequestParam int page, @RequestParam int size, @RequestBody Flow info) {
         Page<Flow> list = flowService.findByPage(page, size, info);
-        return ResponseEntity.ok(R.ok("Flow query success", list));
+        RMap rMap = RMap.ok("Flow query success", list);
+        rMap.initPage(list);
+        return ResponseEntity.ok(rMap);
     }
 }
