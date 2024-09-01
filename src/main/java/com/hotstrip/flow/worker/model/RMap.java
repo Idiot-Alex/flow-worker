@@ -40,6 +40,7 @@ public class RMap extends HashMap<String, Object> {
   public RMap initPage(Page<?> page) {
     this.put("page", page.getPageNum());
     this.put("size", page.getPageSize());
+    this.put("pages", page.getPages());
     this.put("total", page.getTotal());
     return this;
   }

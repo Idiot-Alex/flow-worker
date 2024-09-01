@@ -19,5 +19,5 @@ mybatis:
 # pagehelper
 pagehelper:
   helper-dialect: duckdb
-  dialectAlias: duckdb=com.github.pagehelper.dialect.helper.MySqlDialect
+  dialectAlias: duckdb=com.hotstrip.flow.worker.config.DuckDBDialect
   reasonable: true
