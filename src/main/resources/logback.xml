@@ -10,7 +10,7 @@
         <file>${LOG_FILE}</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>log/flow-worker-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/flow-worker-%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
