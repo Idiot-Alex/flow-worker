@@ -5,6 +5,7 @@ import java.util.Date;
 import com.hotstrip.flow.worker.typehandler.BlobToStringTypeHandler;
 
 import io.mybatis.provider.Entity;
+import io.mybatis.provider.Entity.Transient;
 import lombok.Data;
 
 @Data
@@ -20,4 +21,12 @@ public class Flow {
   private Date createdAt;
   @Entity.Column(value = "updated_at", insertable = false)
   private Date updatedAt;
+
+  @Transient
+  private String idStr;
+
+  public String getIdStr() {
+    return id + "";
+  }
+
 }
