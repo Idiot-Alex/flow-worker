@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,7 +39,7 @@ public class FlowController {
             return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(R.error("Json data is required"));
         }
 
-        if (flow.getId() == null) {
+        if (flow.getId() != null) {
             // query flow by id
             Flow res = flowService.findById(flow.getId());
             if (res == null) {
@@ -75,4 +76,19 @@ public class FlowController {
         rMap.initPage(list);
         return ResponseEntity.ok(rMap);
     }
+
+    // query flow by id
+    @GetMapping("/api/flow/{id}")
+    public ResponseEntity<R> getFlowById(@PathVariable("id") Long id) {
+        // id cannot null
+        if (id == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(R.error("Flow ID is required"));
+        }
+        Flow flow = flowService.findById(id);
+        if (flow == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(R.error("Flow not found"));
+        }
+        return ResponseEntity.ok(R.ok("succes", flow));
+    }
+    
 }
