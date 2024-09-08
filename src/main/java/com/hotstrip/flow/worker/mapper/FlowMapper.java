@@ -14,4 +14,6 @@ public interface FlowMapper extends BaseMapper<Flow, Long> {
     @Insert("INSERT INTO flow (id, name, json_data) VALUES (#{id}, #{name}, #{jsonData})")
     int insertFlow(Flow flow);
 
+    int updateById(Flow entity);
+
 }

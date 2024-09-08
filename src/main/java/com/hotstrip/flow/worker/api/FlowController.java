@@ -47,7 +47,7 @@ public class FlowController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(R.error("flow not found"));
             }
             // update flow
-            res = flowService.update(flow);
+            res = flowService.updateById(flow);
             log.info("update flow success, flow: {}", JSONUtil.toJsonStr(res));
         } else {
             // insert flow

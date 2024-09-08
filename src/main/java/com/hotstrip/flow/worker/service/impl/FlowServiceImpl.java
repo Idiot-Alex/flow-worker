@@ -12,6 +12,8 @@ import com.hotstrip.flow.worker.mapper.FlowMapper;
 import com.hotstrip.flow.worker.model.Flow;
 import com.hotstrip.flow.worker.service.FLowService;
 
+import io.mybatis.common.core.Code;
+import io.mybatis.common.util.Assert;
 import io.mybatis.service.AbstractService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +28,12 @@ public class FlowServiceImpl extends AbstractService<Flow, Long, FlowMapper> imp
     PageHelper.startPage(page, size);
     List<Flow> list = flowMapper.selectList(info);
     return (Page<Flow>) list;
+  }
+
+  @Override
+  public Flow updateById(Flow entity) {
+    Assert.isTrue(baseMapper.updateById(entity) == 1, Code.UPDATE_FAILURE);
+    return entity;
   }
 
 }

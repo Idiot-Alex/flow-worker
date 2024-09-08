@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotstrip.flow.worker.mapper.FlowMapper">
+
+	<update id="updateById" parameterType="com.hotstrip.flow.worker.model.Flow">
+		UPDATE flow
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="jsonData != null">
+				json_data = #{jsonData,jdbcType=VARCHAR},
+			</if>
+			<if test="createdAt != null">
+				created_at = #{createdAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedAt != null">
+				updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		WHERE id = #{id,jdbcType=BIGINT}
+	</update>
+
+</mapper>
