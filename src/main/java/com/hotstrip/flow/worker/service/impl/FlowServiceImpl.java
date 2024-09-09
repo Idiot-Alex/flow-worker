@@ -26,7 +26,7 @@ public class FlowServiceImpl extends AbstractService<Flow, Long, FlowMapper> imp
 
   public Page<Flow> findByPage(int page, int size, Flow info) {
     PageHelper.startPage(page, size);
-    List<Flow> list = flowMapper.selectList(info);
+    List<Flow> list = flowMapper.list(info);
     return (Page<Flow>) list;
   }
 

@@ -15,9 +15,14 @@ mybatis:
   type-handlers-package: com.hotstrip.flow.worker.typehandler
   configuration:
     map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 # pagehelper
 pagehelper:
   helper-dialect: duckdb
   dialectAlias: duckdb=com.hotstrip.flow.worker.config.DuckDBDialect
   reasonable: true
+
+logging:
+  level:
+    org.mybatis: INFO
