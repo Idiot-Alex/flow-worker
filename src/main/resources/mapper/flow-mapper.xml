@@ -2,7 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hotstrip.flow.worker.mapper.FlowMapper">
 
-	<update id="updateById" parameterType="com.hotstrip.flow.worker.model.Flow">
+	<sql id="base_columns">
+		id,
+		name,
+		json_data,
+		created_at,
+		updated_at
+	</sql>
+
+	<update id="updateById" parameterType="Flow">
 		UPDATE flow
 		<set>
 			<if test="name != null">
@@ -20,5 +28,29 @@
 		</set>
 		WHERE id = #{id,jdbcType=BIGINT}
 	</update>
+
+	<select id="list" parameterType="Flow" resultType="Flow">
+		SELECT
+			<include refid="base_columns"/>
+		FROM flow
+		<where>
+			<if test="id != null">
+				AND id = #{id,jdbcType=BIGINT}
+			</if>
+			<if test="name != null">
+				AND name like concat('%', #{name,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createdAt != null">
+				<![CDATA[
+				AND created_at >= #{createdAt,jdbcType=TIMESTAMP}
+				]]>
+			</if>
+			<if test="updatedAt != null">
+				<![CDATA[
+				AND updated_at <= #{updatedAt,jdbcType=TIMESTAMP}
+				]]>
+			</if>
+		</where>
+	</select>
 
 </mapper>
