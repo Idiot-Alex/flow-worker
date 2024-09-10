@@ -15,7 +15,7 @@ mybatis:
   type-handlers-package: com.hotstrip.flow.worker.typehandler
   configuration:
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: com.hotstrip.flow.worker.config.MybatisLogImpl
 
 # pagehelper
 pagehelper:
@@ -26,3 +26,4 @@ pagehelper:
 logging:
   level:
     org.mybatis: INFO
+    com.hotstrip.flow.worker: DEBUG
