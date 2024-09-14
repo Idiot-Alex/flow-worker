@@ -19,7 +19,7 @@ public interface FLowHisService {
 
   /**
    * 更新（所有字段）
-   * DuckDB 不支持 update table set id = 1 where id = 1 
+   * DuckDB 不支持 update table set id = 1 where id = 1
    *
    * @param entity 实体类
    * @return 返回更新成功后的实体，远程服务调用时，由于序列化和反序列化，入参和返回值不是同一个对象

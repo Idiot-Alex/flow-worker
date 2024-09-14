@@ -1,5 +1,6 @@
 package com.hotstrip.flow.worker.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -32,7 +33,19 @@ public class FlowServiceImpl extends AbstractService<Flow, Long, FlowMapper> imp
 
   @Override
   public Flow updateById(Flow entity) {
+    if (entity.getUpdatedAt() == null) {
+      entity.setUpdatedAt(new Date());
+    }
     Assert.isTrue(baseMapper.updateById(entity) == 1, Code.UPDATE_FAILURE);
+    return entity;
+  }
+
+  @Override
+  public Flow save(Flow entity) {
+    if (entity.getCreatedAt() == null) {
+      entity.setCreatedAt(new Date());
+    }
+    Assert.isTrue(baseMapper.insert(entity) == 1, Code.SAVE_FAILURE);
     return entity;
   }
 
