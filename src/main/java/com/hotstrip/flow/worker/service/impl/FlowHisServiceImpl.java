@@ -1,5 +1,6 @@
 package com.hotstrip.flow.worker.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,8 +10,11 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.hotstrip.flow.worker.mapper.FlowHisMapper;
+import com.hotstrip.flow.worker.model.Flow;
 import com.hotstrip.flow.worker.model.FlowHis;
 import com.hotstrip.flow.worker.service.FLowHisService;
+
+import cn.hutool.core.util.IdUtil;
 import io.mybatis.common.core.Code;
 import io.mybatis.common.util.Assert;
 import io.mybatis.service.AbstractService;
@@ -31,7 +35,22 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
 
   @Override
   public FlowHis updateById(FlowHis entity) {
+    if (entity.getUpdatedAt() == null) {
+      entity.setUpdatedAt(new Date());
+    }
     Assert.isTrue(baseMapper.updateById(entity) == 1, Code.UPDATE_FAILURE);
+    return entity;
+  }
+
+  @Override
+  public FlowHis save(FlowHis entity) {
+    if (entity.getId() == null) {
+      entity.setId(IdUtil.getSnowflakeNextId());
+    }
+    if (entity.getCreatedAt() == null) {
+      entity.setCreatedAt(new Date());
+    }
+    Assert.isTrue(baseMapper.insert(entity) == 1, Code.SAVE_FAILURE);
     return entity;
   }
 

@@ -13,6 +13,7 @@ import com.hotstrip.flow.worker.mapper.FlowMapper;
 import com.hotstrip.flow.worker.model.Flow;
 import com.hotstrip.flow.worker.service.FLowService;
 
+import cn.hutool.core.util.IdUtil;
 import io.mybatis.common.core.Code;
 import io.mybatis.common.util.Assert;
 import io.mybatis.service.AbstractService;
@@ -42,6 +43,9 @@ public class FlowServiceImpl extends AbstractService<Flow, Long, FlowMapper> imp
 
   @Override
   public Flow save(Flow entity) {
+    if (entity.getId() == null) {
+      entity.setId(IdUtil.getSnowflakeNextId());
+    }
     if (entity.getCreatedAt() == null) {
       entity.setCreatedAt(new Date());
     }
