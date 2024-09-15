@@ -7,7 +7,7 @@ import com.hotstrip.flow.worker.model.Flow;
  * there is a document about mybatis-service:
  * @see https://mapper.mybatis.io/docs/v2.x/5.service.html#_5-3-baseservice
  */
-public interface FLowService {
+public interface FlowService {
 
   /**
    * 保存（所有字段）

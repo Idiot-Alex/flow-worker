@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS "flow" (
 CREATE TABLE IF NOT EXISTS "flow_his" (
   "id" BIGINT PRIMARY KEY,
   "flow_id" BIGINT NOT NULL,
+  "seq_no" INTEGER NOT NULL,
   "json_data" BLOB NOT NULL,
   "start_at" TIMESTAMP NULL, -- 开始时间
   "end_at" TIMESTAMP NULL, -- 结束时间
@@ -17,3 +18,6 @@ CREATE TABLE IF NOT EXISTS "flow_his" (
   "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 );
+
+CREATE UNIQUE INDEX unique_idx_flow_id_seq_no ON "flow_his" ("flow_id", "seq_no");
+CREATE INDEX idx_flow_id ON "flow_his" ("flow_id");

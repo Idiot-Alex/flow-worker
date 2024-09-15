@@ -1,13 +1,14 @@
 package com.hotstrip.flow.worker.service;
 
 import com.github.pagehelper.Page;
+import com.hotstrip.flow.worker.model.Flow;
 import com.hotstrip.flow.worker.model.FlowHis;
 
 /**
  * there is a document about mybatis-service:
  * @see https://mapper.mybatis.io/docs/v2.x/5.service.html#_5-3-baseservice
  */
-public interface FLowHisService {
+public interface FlowHisService {
 
   /**
    * 保存（所有字段）
@@ -51,5 +52,12 @@ public interface FLowHisService {
    * @return 分页结果
    */
   Page<FlowHis> findByPage(int page, int size, FlowHis info);
+
+  /**
+   * init flow his by flow
+   * @param flow
+   * @return
+   */
+  FlowHis initFlowHis(Flow flow);
 
 }

@@ -12,8 +12,10 @@ import lombok.Data;
 public class FlowHis {
   @Entity.Column(value = "id", id = true)
   private Long id;
-  @Entity.Column(value = "flow_id", id = true)
+  @Entity.Column(value = "flow_id")
   private Long flowId;
+  @Entity.Column(value = "seq_no")
+  private Integer seqNo;
   @Entity.Column(value = "json_data", typeHandler = BlobToStringTypeHandler.class)
   private String jsonData;
   @Entity.Column(value = "start_at")

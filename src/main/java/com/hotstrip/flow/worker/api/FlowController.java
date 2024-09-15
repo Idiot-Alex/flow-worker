@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.Page;
 import com.hotstrip.flow.worker.model.Flow;
+import com.hotstrip.flow.worker.model.FlowHis;
 import com.hotstrip.flow.worker.model.R;
 import com.hotstrip.flow.worker.model.RMap;
-import com.hotstrip.flow.worker.service.FLowService;
+import com.hotstrip.flow.worker.service.FlowHisService;
+import com.hotstrip.flow.worker.service.FlowService;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -26,7 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 public class FlowController {
 
     @Resource
-    private FLowService flowService;
+    private FlowService flowService;
+    @Resource
+    private FlowHisService flowHisService;
 
     // save flow
     @PostMapping("/api/flow/save")
@@ -90,5 +94,17 @@ public class FlowController {
         }
         return ResponseEntity.ok(R.ok("succes", flow));
     }
+
+    // build flow
+    @GetMapping("/api/flow/build/{id}")
+    public ResponseEntity<R> buildFlow(@PathVariable("id") Long id) {
+        Flow flow = flowService.findById(id);
+        if (flow == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(R.error("flow not found"));
+        }
+        FlowHis flowHis = flowHisService.initFlowHis(flow);
+        return ResponseEntity.ok(R.ok("succes", flowHis));
+    }
+    
     
 }

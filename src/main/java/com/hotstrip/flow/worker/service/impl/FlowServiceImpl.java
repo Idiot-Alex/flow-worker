@@ -11,7 +11,8 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.hotstrip.flow.worker.mapper.FlowMapper;
 import com.hotstrip.flow.worker.model.Flow;
-import com.hotstrip.flow.worker.service.FLowService;
+import com.hotstrip.flow.worker.model.FlowHis;
+import com.hotstrip.flow.worker.service.FlowService;
 
 import cn.hutool.core.util.IdUtil;
 import io.mybatis.common.core.Code;
@@ -21,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class FlowServiceImpl extends AbstractService<Flow, Long, FlowMapper> implements FLowService {
+public class FlowServiceImpl extends AbstractService<Flow, Long, FlowMapper> implements FlowService {
 
   @Resource
   private FlowMapper flowMapper;

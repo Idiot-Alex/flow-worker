@@ -15,10 +15,10 @@ import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class FLowServiceTest extends WorkerAppTest {
+public class FlowServiceTest extends WorkerAppTest {
 
   @Resource
-  private FLowService flowService;
+  private FlowService flowService;
   @Resource
   private FlowMapper flowMapper;
 

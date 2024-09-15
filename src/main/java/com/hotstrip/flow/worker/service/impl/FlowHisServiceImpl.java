@@ -12,7 +12,8 @@ import com.github.pagehelper.PageHelper;
 import com.hotstrip.flow.worker.mapper.FlowHisMapper;
 import com.hotstrip.flow.worker.model.Flow;
 import com.hotstrip.flow.worker.model.FlowHis;
-import com.hotstrip.flow.worker.service.FLowHisService;
+import com.hotstrip.flow.worker.service.FlowHisService;
+import com.hotstrip.flow.worker.service.FlowService;
 
 import cn.hutool.core.util.IdUtil;
 import io.mybatis.common.core.Code;
@@ -22,8 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMapper> implements FLowHisService {
+public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMapper> implements FlowHisService {
 
+  @Resource
+  private FlowService flowService;
   @Resource
   private FlowHisMapper flowHisMapper;
 
@@ -52,6 +55,16 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
     }
     Assert.isTrue(baseMapper.insert(entity) == 1, Code.SAVE_FAILURE);
     return entity;
+  }
+
+  @Override
+  public FlowHis initFlowHis(Flow flow) {
+    int maxSeqNo = flowHisMapper.findMaxSeqNoByFlowId(flow.getId());
+    FlowHis flowHis = new FlowHis();
+    flowHis.setFlowId(flow.getId());
+    flowHis.setSeqNo(maxSeqNo + 1);
+    flowHis.setJsonData(flow.getJsonData());
+    return this.save(flowHis);
   }
 
 }
