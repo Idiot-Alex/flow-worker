@@ -7,7 +7,15 @@
 		name,
 		json_data,
 		created_at,
-		updated_at
+		updated_at,
+	</sql>
+
+	<sql id="union_base_columns">
+		f.id,
+		f.name,
+		f.json_data,
+		f.created_at,
+		f.updated_at,
 	</sql>
 
 	<update id="updateById" parameterType="Flow">
@@ -31,23 +39,24 @@
 
 	<select id="list" parameterType="Flow" resultType="Flow">
 		SELECT
-			<include refid="base_columns"/>
-		FROM flow
+		 	fv.max_seq_no as max_seq_no,
+			<include refid="union_base_columns" />
+		FROM flow f left join flow_seq_no_view fv on f.id = fv.flow_id
 		<where>
 			<if test="id != null">
-				AND id = #{id,jdbcType=BIGINT}
+				AND f.id = #{id,jdbcType=BIGINT}
 			</if>
 			<if test="name != null">
-				AND name like concat('%', #{name,jdbcType=VARCHAR}, '%')
+				AND f.name like concat('%', #{name,jdbcType=VARCHAR}, '%')
 			</if>
 			<if test="createdAt != null">
 				<![CDATA[
-				AND created_at >= #{createdAt,jdbcType=TIMESTAMP}
+				AND f.created_at >= #{createdAt,jdbcType=TIMESTAMP}
 				]]>
 			</if>
 			<if test="updatedAt != null">
 				<![CDATA[
-				AND updated_at <= #{updatedAt,jdbcType=TIMESTAMP}
+				AND f.updated_at <= #{updatedAt,jdbcType=TIMESTAMP}
 				]]>
 			</if>
 		</where>

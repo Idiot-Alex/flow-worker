@@ -24,6 +24,8 @@ public class Flow {
 
   @Transient
   private String idStr;
+  @Transient
+  private Integer maxSeqNo;
 
   public String getIdStr() {
     return id + "";

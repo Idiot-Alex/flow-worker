@@ -21,3 +21,7 @@ CREATE TABLE IF NOT EXISTS "flow_his" (
 
 CREATE UNIQUE INDEX unique_idx_flow_id_seq_no ON "flow_his" ("flow_id", "seq_no");
 CREATE INDEX idx_flow_id ON "flow_his" ("flow_id");
+
+-- flow_seq_no_view
+CREATE VIEW flow_seq_no_view AS 
+SELECT flow_id, MAX(seq_no) as max_seq_no from flow_his group by flow_id;

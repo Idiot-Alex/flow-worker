@@ -11,7 +11,6 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.hotstrip.flow.worker.mapper.FlowMapper;
 import com.hotstrip.flow.worker.model.Flow;
-import com.hotstrip.flow.worker.model.FlowHis;
 import com.hotstrip.flow.worker.service.FlowService;
 
 import cn.hutool.core.util.IdUtil;
