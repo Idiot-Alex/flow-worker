@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class FlowServiceImpl extends AbstractService<Flow, Long, FlowMapper> implements FlowService {
+public class FlowServiceImpl extends AbstractService<Flow, Long, FlowMapper> implements com.hotstrip.flow.worker.service.FlowService {
 
   @Resource
   private FlowMapper flowMapper;

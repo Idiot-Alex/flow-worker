@@ -2,6 +2,8 @@ package com.hotstrip.flow.worker.service;
 
 import javax.annotation.Resource;
 
+import cn.hutool.json.JSONArray;
+import com.hotstrip.flow.worker.model.Node;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 
@@ -31,8 +33,29 @@ public class FlowHisServiceTest extends WorkerAppTest {
   void testRun() {
     FlowHis flowHis = flowHisService.findById(1835606665463197696L);
     log.info("flowHis: {}", JSONUtil.toJsonStr(flowHis));
-    JSONObject jsonData = JSONUtil.parseObj(item.getJsonData());
-    log.info(jsonData.get("nodes"));
+    JSONObject jsonData = JSONUtil.parseObj(flowHis.getJsonData());
+    List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
+    log.info(JSONUtil.toJsonStr(nodes));
+
+    JSONObject sort = jsonData.getJSONObject("sort");
+    log.info(sort.toJSONString(2));
+    List<String> order = sort.getBeanList("order", String.class);
+    log.info("order: {}", order);
+
+    JSONObject predecessors = sort.getJSONObject("predecessors");
+    log.info("predecessors: {}", predecessors.toJSONString(2));
+
+    order.forEach(o -> {
+      List<String> list = predecessors.getBeanList(o, String.class);
+      log.info("order: {}...list: {}", o, JSONUtil.toJsonStr(list));
+      nodes.forEach(node -> {
+        log.info(JSONUtil.toJsonStr(node));
+      });
+      Node node = nodes.stream().filter(n -> o.equals(n.getId())).findFirst().get();
+      if (node.getType().equals("shell")) {
+
+      }
+    });
     // List<FlowHis> list = flowHisService.findByPage(1, 10, new FlowHis());
     // log.info("list: {}", JSONUtil.toJsonStr(list));
     // list.forEach(item -> {
