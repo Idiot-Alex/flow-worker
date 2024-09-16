@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotstrip.flow.worker.mapper.FlowHisMapper">
+
+	<sql id="base_columns">
+		id,
+		flow_id,
+    seq_no,
+		json_data,
+    start_at,
+    end_at,
+		created_at,
+		updated_at,
+	</sql>
+
+	<update id="updateById" parameterType="FlowHis">
+		UPDATE flow_his
+		<set>
+			<if test="jsonData != null">
+				json_data = #{jsonData,jdbcType=VARCHAR},
+			</if>
+			<if test="createdAt != null">
+				created_at = #{createdAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedAt != null">
+				updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		WHERE id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="list" parameterType="FlowHis" resultType="FlowHis">
+		SELECT
+			<include refid="base_columns" />
+		FROM flow_his
+		<where>
+			<if test="id != null">
+				AND id = #{id,jdbcType=BIGINT}
+			</if>
+			<if test="createdAt != null">
+				<![CDATA[
+				AND created_at >= #{createdAt,jdbcType=TIMESTAMP}
+				]]>
+			</if>
+			<if test="updatedAt != null">
+				<![CDATA[
+				AND updated_at <= #{updatedAt,jdbcType=TIMESTAMP}
+				]]>
+			</if>
+		</where>
+	</select>
+
+</mapper>
