@@ -2,6 +2,9 @@ package com.hotstrip.flow.worker.env.maven;
 
 import javax.annotation.Resource;
 
+import com.hotstrip.flow.worker.env.Env;
+import com.hotstrip.flow.worker.env.EnvManager;
+import com.hotstrip.flow.worker.env.EnvStrategy;
 import org.junit.jupiter.api.Test;
 
 import com.hostrip.flow.worker.WorkerAppTest;
@@ -13,6 +16,8 @@ public class MavenEnvTest extends WorkerAppTest {
 
   @Resource
   private MavenEnv mavenEnv;
+  @Resource
+  private EnvManager envManager;
 
   @Test
   void testInfo() {
@@ -21,7 +26,8 @@ public class MavenEnvTest extends WorkerAppTest {
 
   @Test
   void testName() {
-
+    EnvStrategy env = envManager.getEnv("maven");
+    log.info(env.path());
   }
 
   @Test
