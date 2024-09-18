@@ -1,7 +1,6 @@
 package com.hotstrip.flow.worker.service;
 
 import javax.annotation.Resource;
-
 import cn.hutool.json.JSONArray;
 import com.hotstrip.flow.worker.model.Node;
 import org.junit.jupiter.api.Test;
@@ -21,12 +20,27 @@ public class FlowHisServiceTest extends WorkerAppTest {
   private FlowService flowService;
   @Resource
   private FlowHisService flowHisService;
+  @Resource
+  private NodeService nodeService;
 
   @Test
   void testInitFlowHis() {
     Flow flow = flowService.findById(1835258299420094464L);
     FlowHis flowHis = flowHisService.initFlowHis(flow);
     log.info("flowHis: {}", JSONUtil.toJsonStr(flowHis));
+  }
+
+  @Test
+  void testRun1() {
+    JSONObject data = new JSONObject();
+    data.putIfAbsent("cmd", "-v");
+
+    Node node = new Node();
+    node.setId(System.currentTimeMillis()+"");
+    node.setType("maven");
+    node.setData(data);
+
+    nodeService.run(node);
   }
 
   @Test
