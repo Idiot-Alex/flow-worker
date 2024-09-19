@@ -22,7 +22,7 @@ public class LinuxShellEnv implements EnvStrategy {
     public String path() {
         String shellPath;
         try {
-            shellPath = RuntimeUtil.execForStr("echo $SHELL").trim();
+            shellPath = RuntimeUtil.execForStr("which " + System.getenv("SHELL")).trim();
         } catch (Exception e) {
             log.error("Error getting shell path...message: {}", e.getMessage(), e);
             shellPath = null;
@@ -35,10 +35,10 @@ public class LinuxShellEnv implements EnvStrategy {
         String versionOutput;
         try {
             versionOutput = RuntimeUtil.execForStr(this.path() + " --version").trim();
-            Pattern pattern = Pattern.compile("(\\d+\\.\\d+\\.\\d+)");
+            Pattern pattern = Pattern.compile("(zsh|bash)\\s+(\\d+\\.\\d+)");
             Matcher matcher = pattern.matcher(versionOutput);
             if (matcher.find()) {
-                return matcher.group(1);
+                return matcher.group(1) + " " + matcher.group(2);
             } else {
                 log.error("Failed to get shell version.");
                 return null;

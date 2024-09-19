@@ -3,8 +3,6 @@ package com.hotstrip.flow.worker.env.shell;
 import cn.hutool.system.SystemUtil;
 import com.hotstrip.flow.worker.env.Env;
 import com.hotstrip.flow.worker.env.EnvStrategy;
-import com.hotstrip.flow.worker.env.maven.LinuxMavenEnv;
-import com.hotstrip.flow.worker.env.maven.WindowsMavenEnv;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

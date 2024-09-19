@@ -40,13 +40,14 @@ public class NodeServiceImpl implements NodeService {
             throw new RuntimeException("no env named: " + nodeType);
         }
 
-        String[] cmdArgs = cmd.split("//s+");
+        String[] cmdArgs = cmd.split("\\s+");
         log.info("cmdArgs: {}", cmdArgs);
 
         Env env = envStrategy.info();
         log.info("env: {}", JSONUtil.toJsonStr(env));
 
         String[] execCmd = ArrayUtil.insert(cmdArgs, 0, env.getPath());
+        log.info("execCmd: {}", execCmd);
         String output = RuntimeUtil.execForStr(execCmd);
         log.info(output);
     }
