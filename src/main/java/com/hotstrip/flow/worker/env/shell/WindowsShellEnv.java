@@ -35,9 +35,8 @@ public class WindowsShellEnv implements EnvStrategy {
     public String version() {
         String versionOutput;
         try {
-            versionOutput = RuntimeUtil.execForStr("cmd -v").trim();
-            log.info(versionOutput);
-            Pattern pattern = Pattern.compile("(\\d+\\.\\d+(\\.\\d+)?)");
+            versionOutput = RuntimeUtil.execForStr("cmd /c ver").trim();
+            Pattern pattern = Pattern.compile("(\\d+\\.\\d+(\\.\\d+)?(\\.\\d+)?)");
             Matcher matcher = pattern.matcher(versionOutput);
             if (matcher.find()) {
                 return matcher.group(1);
