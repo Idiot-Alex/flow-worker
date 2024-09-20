@@ -1,6 +1,5 @@
 package com.hotstrip.flow.worker;
 
-import com.hotstrip.flow.worker.WorkerApp;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
