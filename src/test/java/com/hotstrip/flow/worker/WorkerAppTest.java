@@ -1,4 +1,4 @@
-package com.hostrip.flow.worker;
+package com.hotstrip.flow.worker;
 
 import com.hotstrip.flow.worker.WorkerApp;
 import org.junit.jupiter.api.Test;

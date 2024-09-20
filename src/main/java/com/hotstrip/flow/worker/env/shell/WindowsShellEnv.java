@@ -5,6 +5,10 @@ import com.hotstrip.flow.worker.env.EnvStrategy;
 
 import cn.hutool.core.util.RuntimeUtil;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -19,9 +23,9 @@ public class WindowsShellEnv implements EnvStrategy {
     public String path() {
         String shellPath;
         try {
-            shellPath = RuntimeUtil.execForStr("where powershell").trim();
+            shellPath = RuntimeUtil.execForStr("where cmd").trim();
         } catch (Exception e) {
-            log.error("Error getting PowerShell path...message: {}", e.getMessage(), e);
+            log.error("Error getting cmd path...message: {}", e.getMessage(), e);
             shellPath = null;
         }
         return shellPath;
@@ -31,10 +35,18 @@ public class WindowsShellEnv implements EnvStrategy {
     public String version() {
         String versionOutput;
         try {
-            versionOutput = RuntimeUtil.execForStr("$PSVersionTable.PSVersion.ToString()").trim();
-            return versionOutput;
+            versionOutput = RuntimeUtil.execForStr("cmd -v").trim();
+            log.info(versionOutput);
+            Pattern pattern = Pattern.compile("(\\d+\\.\\d+(\\.\\d+)?)");
+            Matcher matcher = pattern.matcher(versionOutput);
+            if (matcher.find()) {
+                return matcher.group(1);
+            } else {
+                log.error("Failed to get cmd version.");
+                return null;
+            }
         } catch (Exception e) {
-            log.error("Error getting PowerShell version...message: {}", e.getMessage(), e);
+            log.error("Error getting cmd version...message: {}", e.getMessage(), e);
             return null;
         }
     }

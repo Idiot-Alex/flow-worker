@@ -6,7 +6,7 @@ import javax.annotation.Resource;
 
 import org.junit.jupiter.api.Test;
 
-import com.hostrip.flow.worker.WorkerAppTest;
+import com.hotstrip.flow.worker.WorkerAppTest;
 import com.hotstrip.flow.worker.mapper.FlowMapper;
 import com.hotstrip.flow.worker.model.Flow;
 

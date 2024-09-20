@@ -6,7 +6,7 @@ import cn.hutool.json.JSONUtil;
 import com.hotstrip.flow.worker.env.Env;
 import org.junit.jupiter.api.Test;
 
-import com.hostrip.flow.worker.WorkerAppTest;
+import com.hotstrip.flow.worker.WorkerAppTest;
 import com.hotstrip.flow.worker.env.EnvManager;
 import com.hotstrip.flow.worker.env.EnvStrategy;
 

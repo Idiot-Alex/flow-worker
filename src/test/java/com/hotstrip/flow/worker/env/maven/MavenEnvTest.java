@@ -2,12 +2,11 @@ package com.hotstrip.flow.worker.env.maven;
 
 import javax.annotation.Resource;
 
-import com.hotstrip.flow.worker.env.Env;
 import com.hotstrip.flow.worker.env.EnvManager;
 import com.hotstrip.flow.worker.env.EnvStrategy;
 import org.junit.jupiter.api.Test;
 
-import com.hostrip.flow.worker.WorkerAppTest;
+import com.hotstrip.flow.worker.WorkerAppTest;
 
 import lombok.extern.slf4j.Slf4j;
 

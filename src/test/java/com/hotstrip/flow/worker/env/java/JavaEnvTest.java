@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.junit.jupiter.api.Test;
 
-import com.hostrip.flow.worker.WorkerAppTest;
+import com.hotstrip.flow.worker.WorkerAppTest;
 
 import lombok.extern.slf4j.Slf4j;
 
