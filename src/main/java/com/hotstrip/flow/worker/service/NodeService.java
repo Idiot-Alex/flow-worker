@@ -1,8 +1,9 @@
 package com.hotstrip.flow.worker.service;
 
+import com.hotstrip.flow.worker.model.ExecRes;
 import com.hotstrip.flow.worker.model.Node;
 
 public interface NodeService {
 
-    void run(Node node);
+    ExecRes run(Node node);
 }

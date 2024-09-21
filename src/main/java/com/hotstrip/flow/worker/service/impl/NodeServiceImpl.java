@@ -8,6 +8,7 @@ import cn.hutool.json.JSONUtil;
 import com.hotstrip.flow.worker.env.Env;
 import com.hotstrip.flow.worker.env.EnvManager;
 import com.hotstrip.flow.worker.env.EnvStrategy;
+import com.hotstrip.flow.worker.model.ExecRes;
 import com.hotstrip.flow.worker.model.Node;
 import com.hotstrip.flow.worker.service.NodeService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,32 +24,43 @@ public class NodeServiceImpl implements NodeService {
     @Resource
     private EnvManager envManager;
     @Override
-    public void run(Node node) {
-        Assert.notNull(node, "node cannot be null");
-        Assert.notNull(node.getData(), "node data cannot be null");
+    public ExecRes run(Node node) {
+        ExecRes execRes = new ExecRes();
+        try {
+            Assert.notNull(node, "node cannot be null");
+            Assert.notNull(node.getData(), "node data cannot be null");
 
-        JSONObject data = node.getData();
-        String nodeType = node.getType();
-        String cmd = data.getStr("cmd");
-        if (StrUtil.isBlank(cmd)) {
-            log.error("the cmd is blank at node id: {}, type: {}", node.getId(), nodeType);
-            throw new RuntimeException(String.format("the cmd is blank at node id: %s, type: %s", node.getId(), nodeType));
+            JSONObject data = node.getData();
+            String nodeType = node.getType();
+            String cmd = data.getStr("cmd");
+            if (StrUtil.isBlank(cmd)) {
+                log.error("the cmd is blank at node id: {}, type: {}", node.getId(), nodeType);
+                throw new RuntimeException(String.format("the cmd is blank at node id: %s, type: %s", node.getId(), nodeType));
+            }
+            EnvStrategy envStrategy = envManager.getEnv(nodeType);
+            if (null == envStrategy) {
+                log.error("there is no env named: {}", nodeType);
+                throw new RuntimeException("no env named: " + nodeType);
+            }
+
+            String[] cmdArgs = cmd.split("\\s+");
+            log.info("cmdArgs: {}", cmdArgs);
+
+            Env env = envStrategy.info();
+            log.info("env: {}", JSONUtil.toJsonStr(env));
+
+            String[] execCmd = ArrayUtil.insert(cmdArgs, 0, env.getPath());
+            log.info("execCmd: {}", execCmd);
+
+            String output = RuntimeUtil.execForStr(execCmd);
+            log.info("output: {}", output);
+            execRes.setExitCode(0);
+            execRes.setOutput(output);
+        } catch (Exception e) {
+            log.error("execCmd error: {}", e.getMessage(), e);
+            execRes.setExitCode(1);
+            execRes.setOutput(e.getMessage());
         }
-        EnvStrategy envStrategy = envManager.getEnv(nodeType);
-        if (null == envStrategy) {
-            log.error("there is no env named: {}", nodeType);
-            throw new RuntimeException("no env named: " + nodeType);
-        }
-
-        String[] cmdArgs = cmd.split("\\s+");
-        log.info("cmdArgs: {}", cmdArgs);
-
-        Env env = envStrategy.info();
-        log.info("env: {}", JSONUtil.toJsonStr(env));
-
-        String[] execCmd = ArrayUtil.insert(cmdArgs, 0, env.getPath());
-        log.info("execCmd: {}", execCmd);
-        String output = RuntimeUtil.execForStr(execCmd);
-        log.info(output);
+        return execRes;
     }
 }
