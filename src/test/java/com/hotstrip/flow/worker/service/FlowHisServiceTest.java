@@ -2,6 +2,7 @@ package com.hotstrip.flow.worker.service;
 
 import javax.annotation.Resource;
 
+import com.hotstrip.flow.worker.model.ExecRes;
 import com.hotstrip.flow.worker.model.Node;
 import org.junit.jupiter.api.Test;
 import java.util.List;
@@ -44,6 +45,12 @@ public class FlowHisServiceTest extends WorkerAppTest {
   }
 
   @Test
+  void run2() {
+    FlowHis flowHis = flowHisService.findById(1835606665463197696L);
+    flowHisService.run(flowHis);
+  }
+
+  @Test
   void testRun() {
     FlowHis flowHis = flowHisService.findById(1835606665463197696L);
     log.info("flowHis: {}", JSONUtil.toJsonStr(flowHis));
@@ -63,12 +70,17 @@ public class FlowHisServiceTest extends WorkerAppTest {
       List<String> list = predecessors.getBeanList(o, String.class);
       log.info("order: {}...list: {}", o, JSONUtil.toJsonStr(list));
       nodes.forEach(node -> {
-        log.info(JSONUtil.toJsonStr(node));
+        if (!"start".equals(node.getType())) {
+          log.info(JSONUtil.toJsonStr(node));
+          ExecRes execRes = nodeService.run(node);
+          node.getData().set("execRes", execRes);
+          log.info("node exec res: {}", JSONUtil.toJsonStr(node));
+        }
       });
-      Node node = nodes.stream().filter(n -> o.equals(n.getId())).findFirst().get();
-      if (node.getType().equals("shell")) {
-
-      }
+//      Node node = nodes.stream().filter(n -> o.equals(n.getId())).findFirst().get();
+//      if (node.getType().equals("shell")) {
+//
+//      }
     });
     // List<FlowHis> list = flowHisService.findByPage(1, 10, new FlowHis());
     // log.info("list: {}", JSONUtil.toJsonStr(list));

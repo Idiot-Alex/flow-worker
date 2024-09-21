@@ -60,4 +60,5 @@ public interface FlowHisService {
    */
   FlowHis initFlowHis(Flow flow);
 
+  void run(FlowHis flowHis);
 }

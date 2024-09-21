@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 
 @Slf4j
 @Service
@@ -23,11 +24,21 @@ public class NodeServiceImpl implements NodeService {
 
     @Resource
     private EnvManager envManager;
+
+    private static final String[] SKIP_NODE_TYPS = new String[] { "start", "console" };
+
     @Override
     public ExecRes run(Node node) {
         ExecRes execRes = new ExecRes();
+        if (Arrays.asList(SKIP_NODE_TYPS).contains(node.getType())) {
+            log.info("skip this node type: {}", node.getType());
+            execRes.setCode(0);
+            execRes.setOutput("skip this node");
+            return execRes;
+        }
         try {
             Assert.notNull(node, "node cannot be null");
+            Assert.notNull(node.getType(), "node type cannot be null");
             Assert.notNull(node.getData(), "node data cannot be null");
 
             JSONObject data = node.getData();
@@ -54,11 +65,11 @@ public class NodeServiceImpl implements NodeService {
 
             String output = RuntimeUtil.execForStr(execCmd);
             log.info("output: {}", output);
-            execRes.setExitCode(0);
+            execRes.setCode(0);
             execRes.setOutput(output);
         } catch (Exception e) {
             log.error("execCmd error: {}", e.getMessage(), e);
-            execRes.setExitCode(1);
+            execRes.setCode(1);
             execRes.setOutput(e.getMessage());
         }
         return execRes;
