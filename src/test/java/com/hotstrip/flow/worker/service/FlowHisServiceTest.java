@@ -46,8 +46,8 @@ public class FlowHisServiceTest extends WorkerAppTest {
 
   @Test
   void run2() {
-    FlowHis flowHis = flowHisService.findById(1835606665463197696L);
-    flowHisService.run(flowHis);
+//    FlowHis flowHis = flowHisService.findById(1835606665463197696L);
+    flowHisService.run(1835606665463197696L);
   }
 
   @Test

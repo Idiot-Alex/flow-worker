@@ -74,53 +74,64 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
     return this.save(flowHis);
   }
 
-    @Override
-    public void run(FlowHis flowHis) {
-      JSONObject jsonData = JSONUtil.parseObj(flowHis.getJsonData());
-      List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
-      JSONObject sort = jsonData.getJSONObject("sort");
-      List<String> order = sort.getBeanList("order", String.class);
-      JSONObject predecessors = sort.getJSONObject("predecessors");
+  @Override
+  public void run(long id) {
+    resetExecStatus(id);
 
-      resetExecStatus(flowHis);
+    FlowHis flowHis = findById(id);
+    JSONObject jsonData = JSONUtil.parseObj(flowHis.getJsonData());
+    List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
+    JSONObject sort = jsonData.getJSONObject("sort");
+    List<String> order = sort.getBeanList("order", String.class);
+    JSONObject predecessors = sort.getJSONObject("predecessors");
 
-      // foreach order node
-      order.forEach(o -> {
-        // check node's predecessors FIXME maybe need refactor
-        List<String> preOrderList = predecessors.getBeanList(o, String.class);
-        preOrderList.forEach(pre -> {
-          Node node = nodes.stream().filter(n -> o.equals(n.getId())).findFirst().get();
-          ExecRes execRes = nodeService.run(node);
-          node.getData().set("execRes", execRes);
-        });
+    // foreach order node
+    order.forEach(o -> {
+      // check node's predecessors FIXME maybe need refactor
+//      List<String> preOrderList = predecessors.getBeanList(o, String.class);
+//      preOrderList.forEach(pre -> {
+//        Node node = nodes.stream().filter(n -> o.equals(n.getId())).findFirst().get();
+//        ExecRes execRes = nodeService.run(node);
+//        node.getData().set("execRes", execRes);
+//      });
 
-        // exec order node
-        Node node = nodes.stream().filter(n -> o.equals(n.getId())).findFirst().get();
-        ExecRes execRes = nodeService.run(node);
-        node.getData().set("execRes", execRes);
-      });
+      // exec order node
+      Node node = nodes.stream().filter(n -> o.equals(n.getId())).findFirst().get();
+      ExecRes execRes = nodeService.run(node);
+      node.getData().set("execRes", execRes);
+    });
 
-      log.info("executed nodes: {}", JSONUtil.toJsonStr(nodes));
-    }
+    log.info("executed nodes: {}", JSONUtil.toJsonStr(nodes));
+  }
 
-    private void resetExecStatus(FlowHis flowHis) {
-      JSONObject jsonData = JSONUtil.parseObj(flowHis.getJsonData());
-      List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
+  private void resetExecStatus(long id) {
+    FlowHis flowHis = findById(id);
+    JSONObject jsonData = JSONUtil.parseObj(flowHis.getJsonData());
+    List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
 
-      // reset exec status
-      nodes.forEach(node -> {
-        JSONObject nodeData = node.getData();
-        nodeData.remove("execRes");
-        nodeData.set("isRunning", false);
-        nodeData.set("isFinished", false);
-        nodeData.set("hasError", false);
-        nodeData.set("isSkipped", false);
-      });
+    // reset exec status
+    nodes.forEach(node -> {
+      JSONObject nodeData = node.getData();
+      nodeData.remove("execRes");
+      nodeData.set("isRunning", false);
+      nodeData.set("isFinished", false);
+      nodeData.set("hasError", false);
+      nodeData.set("isSkipped", false);
+    });
 
-      jsonData.set("nodes", nodes);
-      flowHis.setJsonData(jsonData.toJSONString(2));
+    jsonData.set("nodes", nodes);
+    flowHis.setJsonData(jsonData.toJSONString(2));
+    flowHis.setStartAt(new Date());
+    flowHis.setEndAt(null);
 
-      flowHisMapper.updateById(flowHis);
-    }
+    flowHisMapper.updateById(flowHis);
+  }
+
+  private List<Node> getNodeListById(long id) {
+    FlowHis flowHis = this.findById(id);
+    JSONObject jsonData = JSONUtil.parseObj(flowHis.getJsonData());
+    List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
+    return nodes;
+  }
 
 }
