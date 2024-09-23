@@ -6,4 +6,6 @@ import com.hotstrip.flow.worker.model.Node;
 public interface NodeService {
 
     ExecRes run(Node node);
+
+    Node save(Node node);
 }

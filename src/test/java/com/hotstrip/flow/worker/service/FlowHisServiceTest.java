@@ -37,9 +37,9 @@ public class FlowHisServiceTest extends WorkerAppTest {
     data.putIfAbsent("cmd", "-v");
 
     Node node = new Node();
-    node.setId(System.currentTimeMillis()+"");
+    node.setId(System.currentTimeMillis());
     node.setType("maven");
-    node.setData(data);
+    node.setNodeData(data);
 
     nodeService.run(node);
   }
@@ -73,7 +73,7 @@ public class FlowHisServiceTest extends WorkerAppTest {
         if (!"start".equals(node.getType())) {
           log.info(JSONUtil.toJsonStr(node));
           ExecRes execRes = nodeService.run(node);
-          node.getData().set("execRes", execRes);
+          node.getNodeData().set("execRes", execRes);
           log.info("node exec res: {}", JSONUtil.toJsonStr(node));
         }
       });

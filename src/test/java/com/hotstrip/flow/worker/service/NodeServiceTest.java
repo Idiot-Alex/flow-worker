@@ -20,9 +20,9 @@ public class NodeServiceTest extends WorkerAppTest {
         data.putIfAbsent("cmd", "-c ls -l");
 
         Node node = new Node();
-        node.setId(System.currentTimeMillis()+"");
+        node.setId(System.currentTimeMillis());
         node.setType("shell");
-        node.setData(data);
+        node.setNodeData(data);
 
         nodeService.run(node);
     }

@@ -1,26 +1,32 @@
 package com.hotstrip.flow.worker.service.impl;
 
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import io.mybatis.common.core.Code;
+import io.mybatis.common.util.Assert;
+import io.mybatis.service.AbstractService;
+
 import com.hotstrip.flow.worker.env.Env;
 import com.hotstrip.flow.worker.env.EnvManager;
 import com.hotstrip.flow.worker.env.EnvStrategy;
+import com.hotstrip.flow.worker.mapper.NodeMapper;
 import com.hotstrip.flow.worker.model.ExecRes;
 import com.hotstrip.flow.worker.model.Node;
 import com.hotstrip.flow.worker.service.NodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.Date;
 
 @Slf4j
 @Service
-public class NodeServiceImpl implements NodeService {
+public class NodeServiceImpl extends AbstractService<Node, Long, NodeMapper> implements NodeService {
 
     @Resource
     private EnvManager envManager;
@@ -39,9 +45,9 @@ public class NodeServiceImpl implements NodeService {
         try {
             Assert.notNull(node, "node cannot be null");
             Assert.notNull(node.getType(), "node type cannot be null");
-            Assert.notNull(node.getData(), "node data cannot be null");
+            Assert.notNull(node.getNodeData(), "node data cannot be null");
 
-            JSONObject data = node.getData();
+            JSONObject data = node.getNodeData();
             String nodeType = node.getType();
             String cmd = data.getStr("cmd");
             if (StrUtil.isBlank(cmd)) {
@@ -73,5 +79,17 @@ public class NodeServiceImpl implements NodeService {
             execRes.setOutput(e.getMessage());
         }
         return execRes;
+    }
+
+    @Override
+    public Node save(Node entity) {
+        if (entity.getId() == null) {
+            entity.setId(IdUtil.getSnowflakeNextId());
+        }
+        if (entity.getCreatedAt() == null) {
+            entity.setCreatedAt(new Date());
+        }
+        Assert.isTrue(baseMapper.insert(entity) == 1, Code.SAVE_FAILURE);
+        return entity;
     }
 }

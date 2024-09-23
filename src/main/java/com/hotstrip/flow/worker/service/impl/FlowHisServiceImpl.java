@@ -11,6 +11,7 @@ import com.hotstrip.flow.worker.model.ExecRes;
 import com.hotstrip.flow.worker.model.Node;
 import com.hotstrip.flow.worker.service.NodeService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -65,13 +66,33 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
   }
 
   @Override
+  @Transactional
   public FlowHis initFlowHis(Flow flow) {
+    // save flow his
     int maxSeqNo = flowHisMapper.findMaxSeqNoByFlowId(flow.getId());
     FlowHis flowHis = new FlowHis();
     flowHis.setFlowId(flow.getId());
     flowHis.setSeqNo(maxSeqNo + 1);
     flowHis.setJsonData(flow.getJsonData());
-    return this.save(flowHis);
+    FlowHis flowHisSaved = this.save(flowHis);
+
+    // load params
+    JSONObject jsonData = JSONUtil.parseObj(flow.getJsonData());
+    List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
+    JSONObject sort = jsonData.getJSONObject("sort");
+    List<String> order = sort.getBeanList("order", String.class);
+
+    // save node
+    int orderNum = 0;
+    for (String nodeId : order) {
+      Node node = nodes.stream().filter(n -> nodeId.equals(n.getId())).findFirst().get();
+      node.setFlowHisId(flowHisSaved.getId());
+      node.setOrder(orderNum);
+      nodeService.save(node);
+      orderNum++;
+    }
+
+    return flowHisSaved;
   }
 
   @Override
@@ -98,7 +119,7 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
       // exec order node
       Node node = nodes.stream().filter(n -> o.equals(n.getId())).findFirst().get();
       ExecRes execRes = nodeService.run(node);
-      node.getData().set("execRes", execRes);
+      node.getNodeData().set("execRes", execRes);
     });
 
     log.info("executed nodes: {}", JSONUtil.toJsonStr(nodes));
@@ -111,7 +132,7 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
 
     // reset exec status
     nodes.forEach(node -> {
-      JSONObject nodeData = node.getData();
+      JSONObject nodeData = node.getNodeData();
       nodeData.remove("execRes");
       nodeData.set("isRunning", false);
       nodeData.set("isFinished", false);
