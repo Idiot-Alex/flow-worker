@@ -2,8 +2,8 @@ package com.hotstrip.flow.worker.model;
 
 import java.util.Date;
 
-import com.hotstrip.flow.worker.typehandler.BlobToStringTypeHandler;
-
+import cn.hutool.json.JSONObject;
+import com.hotstrip.flow.worker.typehandler.BlobToJsonObjectTypeHandler;
 import io.mybatis.provider.Entity;
 import io.mybatis.provider.Entity.Transient;
 import lombok.Data;
@@ -15,8 +15,8 @@ public class Flow {
   private Long id;
   @Entity.Column(value = "name")
   private String name;
-  @Entity.Column(value = "json_data", typeHandler = BlobToStringTypeHandler.class)
-  private String jsonData;
+  @Entity.Column(value = "json_data", typeHandler = BlobToJsonObjectTypeHandler.class)
+  private JSONObject jsonData;
   @Entity.Column(value = "created_at", updatable = false)
   private Date createdAt;
   @Entity.Column(value = "updated_at", insertable = false)

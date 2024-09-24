@@ -39,7 +39,7 @@ public class FlowController {
         if (StrUtil.isBlank(flow.getName())) {
             return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(R.error("Flow name is required"));
         }
-        if (StrUtil.isBlank(flow.getJsonData())) {
+        if (null == flow.getJsonData()) {
             return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(R.error("Json data is required"));
         }
 

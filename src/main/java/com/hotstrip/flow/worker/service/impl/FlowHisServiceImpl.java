@@ -68,6 +68,7 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
   @Override
   @Transactional
   public FlowHis initFlowHis(Flow flow) {
+    Assert.notNull(flow, "flow is null");
     // save flow his
     int maxSeqNo = flowHisMapper.findMaxSeqNoByFlowId(flow.getId());
     FlowHis flowHis = new FlowHis();
@@ -77,7 +78,7 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
     FlowHis flowHisSaved = this.save(flowHis);
 
     // load params
-    JSONObject jsonData = JSONUtil.parseObj(flow.getJsonData());
+    JSONObject jsonData = flow.getJsonData();
     List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
     JSONObject sort = jsonData.getJSONObject("sort");
     List<Long> order = sort.getBeanList("order", Long.class);
@@ -89,7 +90,16 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
       log.info("node: {}", JSONUtil.toJsonStr(node));
       node.setFlowHisId(flowHisSaved.getId());
       node.setSeqNo(orderNum);
+
+      // init node data
+      JSONObject nodeData = node.getData();
+      nodeData.remove("execRes");
+      nodeData.set("isRunning", false);
+      nodeData.set("isFinished", false);
+      nodeData.set("hasError", false);
+      nodeData.set("isSkipped", false);
       nodeService.save(node);
+      log.info("node: {}", JSONUtil.toJsonStr(node));
       orderNum++;
     }
 
@@ -101,7 +111,7 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
     resetExecStatus(id);
 
     FlowHis flowHis = findById(id);
-    JSONObject jsonData = JSONUtil.parseObj(flowHis.getJsonData());
+    JSONObject jsonData = flowHis.getJsonData();
     List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
     JSONObject sort = jsonData.getJSONObject("sort");
     List<String> order = sort.getBeanList("order", String.class);
@@ -128,7 +138,7 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
 
   private void resetExecStatus(long id) {
     FlowHis flowHis = findById(id);
-    JSONObject jsonData = JSONUtil.parseObj(flowHis.getJsonData());
+    JSONObject jsonData = flowHis.getJsonData();
     List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
 
     // reset exec status
@@ -142,7 +152,7 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
     });
 
     jsonData.set("nodes", nodes);
-    flowHis.setJsonData(jsonData.toJSONString(2));
+    flowHis.setJsonData(jsonData);
     flowHis.setStartAt(new Date());
     flowHis.setEndAt(null);
 
@@ -151,7 +161,7 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
 
   private List<Node> getNodeListById(long id) {
     FlowHis flowHis = this.findById(id);
-    JSONObject jsonData = JSONUtil.parseObj(flowHis.getJsonData());
+    JSONObject jsonData = flowHis.getJsonData();
     List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
     return nodes;
   }

@@ -3,6 +3,7 @@ package com.hotstrip.flow.worker.api;
 import java.util.Date;
 import javax.annotation.Resource;
 
+import cn.hutool.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -23,11 +24,13 @@ public class FlowControllerTest extends WorkerAppTest {
 
   @Test
   public void testSaveFlow() {
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.set("key", "value");
     // 创建一个 Flow 对象
     Flow flow = new Flow();
     flow.setId(IdUtil.getSnowflake().nextId());
     flow.setName("testFlow");
-    flow.setJsonData("{\"key\":\"value\"}");
+    flow.setJsonData(jsonObject);
     flow.setCreatedAt(new Date());
 
     // 发送 POST 请求到 /api/flow/save

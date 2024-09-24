@@ -3,7 +3,6 @@ package com.hotstrip.flow.worker.service;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.hotstrip.flow.worker.WorkerAppTest;
-import com.hotstrip.flow.worker.model.Flow;
 import com.hotstrip.flow.worker.model.Node;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

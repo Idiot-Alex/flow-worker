@@ -54,7 +54,7 @@ public class FlowHisServiceTest extends WorkerAppTest {
   void testRun() {
     FlowHis flowHis = flowHisService.findById(1835606665463197696L);
     log.info("flowHis: {}", JSONUtil.toJsonStr(flowHis));
-    JSONObject jsonData = JSONUtil.parseObj(flowHis.getJsonData());
+    JSONObject jsonData = flowHis.getJsonData();
     List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
     log.info(JSONUtil.toJsonStr(nodes));
 

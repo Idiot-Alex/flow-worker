@@ -1,8 +1,9 @@
 package com.hotstrip.flow.worker.model;
 
 import java.util.Date;
-import com.hotstrip.flow.worker.typehandler.BlobToStringTypeHandler;
 
+import cn.hutool.json.JSONObject;
+import com.hotstrip.flow.worker.typehandler.BlobToJsonObjectTypeHandler;
 import io.mybatis.provider.Entity;
 import io.mybatis.provider.Entity.Transient;
 import lombok.Data;
@@ -16,8 +17,8 @@ public class FlowHis {
   private Long flowId;
   @Entity.Column(value = "seq_no")
   private Integer seqNo;
-  @Entity.Column(value = "json_data", typeHandler = BlobToStringTypeHandler.class)
-  private String jsonData;
+  @Entity.Column(value = "json_data", typeHandler = BlobToJsonObjectTypeHandler.class)
+  private JSONObject jsonData;
   @Entity.Column(value = "start_at")
   private Date startAt;
   @Entity.Column(value = "end_at")
