@@ -8,6 +8,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import io.mybatis.common.core.Code;
 import io.mybatis.common.util.Assert;
+import io.mybatis.mapper.example.Example;
 import io.mybatis.service.AbstractService;
 
 import com.hotstrip.flow.worker.env.Env;
@@ -45,9 +46,9 @@ public class NodeServiceImpl extends AbstractService<Node, Long, NodeMapper> imp
         try {
             Assert.notNull(node, "node cannot be null");
             Assert.notNull(node.getType(), "node type cannot be null");
-            Assert.notNull(node.getNodeData(), "node data cannot be null");
+            Assert.notNull(node.getData(), "node data cannot be null");
 
-            JSONObject data = node.getNodeData();
+            JSONObject data = node.getData();
             String nodeType = node.getType();
             String cmd = data.getStr("cmd");
             if (StrUtil.isBlank(cmd)) {
@@ -90,6 +91,15 @@ public class NodeServiceImpl extends AbstractService<Node, Long, NodeMapper> imp
             entity.setCreatedAt(new Date());
         }
         Assert.isTrue(baseMapper.insert(entity) == 1, Code.SAVE_FAILURE);
+        return entity;
+    }
+
+    @Override
+    public Node updateById(Node entity) {
+        if (entity.getUpdatedAt() == null) {
+            entity.setUpdatedAt(new Date());
+        }
+        Assert.isTrue(baseMapper.updateById(entity) == 1, Code.UPDATE_FAILURE);
         return entity;
     }
 }

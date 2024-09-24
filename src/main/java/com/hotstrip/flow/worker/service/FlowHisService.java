@@ -6,7 +6,7 @@ import com.hotstrip.flow.worker.model.FlowHis;
 
 /**
  * there is a document about mybatis-service:
- * @see https://mapper.mybatis.io/docs/v2.x/5.service.html#_5-3-baseservice
+ * @see <a href="https://mapper.mybatis.io/docs/v2.x/5.service.html#_5-3-baseservice">mybatis service</a>
  */
 public interface FlowHisService {
 

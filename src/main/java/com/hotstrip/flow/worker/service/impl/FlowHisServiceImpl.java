@@ -80,14 +80,15 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
     JSONObject jsonData = JSONUtil.parseObj(flow.getJsonData());
     List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
     JSONObject sort = jsonData.getJSONObject("sort");
-    List<String> order = sort.getBeanList("order", String.class);
+    List<Long> order = sort.getBeanList("order", Long.class);
 
     // save node
     int orderNum = 0;
-    for (String nodeId : order) {
+    for (Long nodeId : order) {
       Node node = nodes.stream().filter(n -> nodeId.equals(n.getId())).findFirst().get();
+      log.info("node: {}", JSONUtil.toJsonStr(node));
       node.setFlowHisId(flowHisSaved.getId());
-      node.setOrder(orderNum);
+      node.setSeqNo(orderNum);
       nodeService.save(node);
       orderNum++;
     }
@@ -119,7 +120,7 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
       // exec order node
       Node node = nodes.stream().filter(n -> o.equals(n.getId())).findFirst().get();
       ExecRes execRes = nodeService.run(node);
-      node.getNodeData().set("execRes", execRes);
+      node.getData().set("execRes", execRes);
     });
 
     log.info("executed nodes: {}", JSONUtil.toJsonStr(nodes));
@@ -132,7 +133,7 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
 
     // reset exec status
     nodes.forEach(node -> {
-      JSONObject nodeData = node.getNodeData();
+      JSONObject nodeData = node.getData();
       nodeData.remove("execRes");
       nodeData.set("isRunning", false);
       nodeData.set("isFinished", false);

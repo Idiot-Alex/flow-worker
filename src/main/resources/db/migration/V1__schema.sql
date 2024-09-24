@@ -25,9 +25,9 @@ CREATE INDEX idx_flow_id ON "flow_his" ("flow_id");
 CREATE TABLE IF NOT EXISTS "node" (
   "id" BIGINT PRIMARY KEY,
   "flow_his_id" BIGINT NOT NULL,
-  "order" INTEGER NOT NULL,
+  "seq_no" INTEGER NOT NULL,
   "type" VARCHAR NOT NULL,
-  "node_data" BLOB NOT NULL,
+  "data" BLOB NOT NULL,
   "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 );

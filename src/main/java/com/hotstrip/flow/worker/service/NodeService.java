@@ -8,4 +8,10 @@ public interface NodeService {
     ExecRes run(Node node);
 
     Node save(Node node);
+
+    Node findById(Long id);
+
+    Node updateById(Node entity);
+
+    int deleteById(Long id);
 }
