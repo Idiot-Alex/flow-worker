@@ -8,7 +8,6 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import io.mybatis.common.core.Code;
 import io.mybatis.common.util.Assert;
-import io.mybatis.mapper.example.Example;
 import io.mybatis.service.AbstractService;
 
 import com.hotstrip.flow.worker.env.Env;
