@@ -107,33 +107,16 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
   }
 
   @Override
-  public void run(long id) {
-    resetExecStatus(id);
+  public void run(long flowHisId) {
+    resetExecStatus(flowHisId);
 
-    FlowHis flowHis = findById(id);
-    JSONObject jsonData = flowHis.getJsonData();
-    List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
-    JSONObject sort = jsonData.getJSONObject("sort");
-    List<String> order = sort.getBeanList("order", String.class);
-    JSONObject predecessors = sort.getJSONObject("predecessors");
-
-    // foreach order node
-    order.forEach(o -> {
-      // check node's predecessors FIXME maybe need refactor
-//      List<String> preOrderList = predecessors.getBeanList(o, String.class);
-//      preOrderList.forEach(pre -> {
-//        Node node = nodes.stream().filter(n -> o.equals(n.getId())).findFirst().get();
-//        ExecRes execRes = nodeService.run(node);
-//        node.getData().set("execRes", execRes);
-//      });
-
-      // exec order node
-      Node node = nodes.stream().filter(n -> o.equals(n.getId())).findFirst().get();
+    List<Node> nodeList = nodeService.findByFlowHisId(flowHisId);
+    log.info("nodeList: {}", JSONUtil.toJsonStr(nodeList));
+    nodeList.forEach(node -> {
+      // start run node
       ExecRes execRes = nodeService.run(node);
       node.getData().set("execRes", execRes);
     });
-
-    log.info("executed nodes: {}", JSONUtil.toJsonStr(nodes));
   }
 
   private void resetExecStatus(long id) {

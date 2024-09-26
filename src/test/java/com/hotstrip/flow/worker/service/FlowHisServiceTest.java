@@ -32,6 +32,12 @@ public class FlowHisServiceTest extends WorkerAppTest {
   }
 
   @Test
+  void testFindByPage() {
+    List<FlowHis> list = flowHisService.findByPage(0, 10, new FlowHis());
+    log.info("list: {}", JSONUtil.toJsonStr(list));
+  }
+
+  @Test
   void testRun1() {
     JSONObject data = new JSONObject();
     data.putIfAbsent("cmd", "-v");
@@ -47,7 +53,7 @@ public class FlowHisServiceTest extends WorkerAppTest {
   @Test
   void run2() {
 //    FlowHis flowHis = flowHisService.findById(1835606665463197696L);
-    flowHisService.run(1835606665463197696L);
+    flowHisService.run(1838501588075622400L);
   }
 
   @Test

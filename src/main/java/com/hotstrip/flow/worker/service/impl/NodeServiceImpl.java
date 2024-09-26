@@ -13,6 +13,7 @@ import io.mybatis.service.AbstractService;
 import com.hotstrip.flow.worker.env.Env;
 import com.hotstrip.flow.worker.env.EnvManager;
 import com.hotstrip.flow.worker.env.EnvStrategy;
+import com.hotstrip.flow.worker.mapper.FlowMapper;
 import com.hotstrip.flow.worker.mapper.NodeMapper;
 import com.hotstrip.flow.worker.model.ExecRes;
 import com.hotstrip.flow.worker.model.Node;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -30,6 +32,8 @@ public class NodeServiceImpl extends AbstractService<Node, Long, NodeMapper> imp
 
     @Resource
     private EnvManager envManager;
+    @Resource
+  private NodeMapper nodeMapper;
 
     private static final String[] SKIP_NODE_TYPS = new String[] { "start", "console" };
 
@@ -100,5 +104,10 @@ public class NodeServiceImpl extends AbstractService<Node, Long, NodeMapper> imp
         }
         Assert.isTrue(baseMapper.updateById(entity) == 1, Code.UPDATE_FAILURE);
         return entity;
+    }
+
+    @Override
+    public List<Node> findByFlowHisId(long flowHisId) {
+        return nodeMapper.findByFlowHisId(flowHisId);
     }
 }
