@@ -38,13 +38,25 @@ public class NodeServiceImpl extends AbstractService<Node, Long, NodeMapper> imp
     private static final String[] SKIP_NODE_TYPS = new String[] { "start", "console" };
 
     @Override
-    public ExecRes run(Node node) {
+    public Node run(Node node) {
+        JSONObject nodeData = node.getData();
+        nodeData.set("isRunning", true);
+        node.setData(nodeData);
+        node = this.updateById(node);
+
         ExecRes execRes = new ExecRes();
         if (Arrays.asList(SKIP_NODE_TYPS).contains(node.getType())) {
-            log.info("skip this node type: {}", node.getType());
             execRes.setCode(0);
             execRes.setOutput("skip this node");
-            return execRes;
+            log.info("skip this node type: {}", node.getType());
+            nodeData = node.getData();
+            nodeData.set("isRunning", false);
+            nodeData.set("isFinished", true);
+            nodeData.set("hasError", false);
+            nodeData.set("isSkipped", true);
+            nodeData.set("execRes",execRes);
+            node.setData(nodeData);
+            return this.updateById(node);
         }
         try {
             Assert.notNull(node, "node cannot be null");
@@ -77,12 +89,27 @@ public class NodeServiceImpl extends AbstractService<Node, Long, NodeMapper> imp
             log.info("output: {}", output);
             execRes.setCode(0);
             execRes.setOutput(output);
+            nodeData = node.getData();
+            nodeData.set("isRunning", false);
+            nodeData.set("isFinished", true);
+            nodeData.set("hasError", false);
+            nodeData.set("isSkipped", false);
+            nodeData.set("execRes",execRes);
+            node.setData(nodeData);
+            return this.updateById(node);
         } catch (Exception e) {
             log.error("execCmd error: {}", e.getMessage(), e);
             execRes.setCode(1);
             execRes.setOutput(e.getMessage());
+            nodeData = node.getData();
+            nodeData.set("isRunning", false);
+            nodeData.set("isFinished", false);
+            nodeData.set("hasError", true);
+            nodeData.set("isSkipped", false);
+            nodeData.set("execRes",execRes);
+            node.setData(nodeData);
+            return this.updateById(node);
         }
-        return execRes;
     }
 
     @Override

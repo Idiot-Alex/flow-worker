@@ -5,6 +5,8 @@ import javax.annotation.Resource;
 import com.hotstrip.flow.worker.model.ExecRes;
 import com.hotstrip.flow.worker.model.Node;
 import org.junit.jupiter.api.Test;
+
+import java.util.Date;
 import java.util.List;
 
 import com.hotstrip.flow.worker.WorkerAppTest;
@@ -51,9 +53,21 @@ public class FlowHisServiceTest extends WorkerAppTest {
   }
 
   @Test
+  void testUpdateNode() {
+    Node node = nodeService.findById(1727430246263L);
+    log.info("node: {}", JSONUtil.toJsonStr(node));
+    node.setUpdatedAt(new Date());
+    nodeService.updateById(node);
+  }
+
+  @Test
   void run2() {
-//    FlowHis flowHis = flowHisService.findById(1835606665463197696L);
-    flowHisService.run(1838501588075622400L);
+    long flowHisId = 1839602008181239808L;
+    FlowHis flowHis = flowHisService.findById(flowHisId);
+    log.info("flowHis: {}", JSONUtil.toJsonStr(flowHis));
+    flowHisService.run(flowHisId);
+    flowHis = flowHisService.findById(flowHisId);
+    log.info("executed flowHis: {}", JSONUtil.toJsonStr(flowHis));
   }
 
   @Test
@@ -78,21 +92,10 @@ public class FlowHisServiceTest extends WorkerAppTest {
       nodes.forEach(node -> {
         if (!"start".equals(node.getType())) {
           log.info(JSONUtil.toJsonStr(node));
-          ExecRes execRes = nodeService.run(node);
-          node.getData().set("execRes", execRes);
-          log.info("node exec res: {}", JSONUtil.toJsonStr(node));
+          Node executedNode = nodeService.run(node);
+          log.info("node exec res: {}", JSONUtil.toJsonStr(executedNode));
         }
       });
-//      Node node = nodes.stream().filter(n -> o.equals(n.getId())).findFirst().get();
-//      if (node.getType().equals("shell")) {
-//
-//      }
     });
-    // List<FlowHis> list = flowHisService.findByPage(1, 10, new FlowHis());
-    // log.info("list: {}", JSONUtil.toJsonStr(list));
-    // list.forEach(item -> {
-    //   JSONObject json = JSONUtil.parseObj(item.getJsonData());
-    //   log.info("id: {}...data: {}", item.getId(), json.toString());
-    // });
   }
 }

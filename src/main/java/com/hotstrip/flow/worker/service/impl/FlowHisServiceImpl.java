@@ -114,13 +114,60 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
     log.info("nodeList: {}", JSONUtil.toJsonStr(nodeList));
     nodeList.forEach(node -> {
       // start run node
-      ExecRes execRes = nodeService.run(node);
-      node.getData().set("execRes", execRes);
+      startExecNode(flowHisId, node.getId());
+      Node executedNode = nodeService.run(node);
+      // sync exec node status
+      syncExecNodeStatus(flowHisId, executedNode);
     });
+
+    // run end
+    finishExecStatus(flowHisId);
   }
 
-  private void resetExecStatus(long id) {
-    FlowHis flowHis = findById(id);
+  private void finishExecStatus(long flowHisId) {
+    FlowHis flowHis = findById(flowHisId);
+    flowHis.setEndAt(new Date());
+    flowHisMapper.updateById(flowHis);
+  }
+
+  private void syncExecNodeStatus(long flowHisId, Node executedNode) {
+    FlowHis flowHis = findById(flowHisId);
+    JSONObject jsonData = flowHis.getJsonData();
+    List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
+
+    nodes.forEach(node -> {
+      if (node.getId() == executedNode.getId()) {
+        node.setData(executedNode.getData());
+      }
+    });
+
+    jsonData.set("nodes", nodes);
+    flowHis.setJsonData(jsonData);
+    flowHisMapper.updateById(flowHis);
+  }
+
+  private void startExecNode(Long flowHisId, Long nodeId) {
+    FlowHis flowHis = findById(flowHisId);
+    JSONObject jsonData = flowHis.getJsonData();
+    List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
+
+    nodes.forEach(node -> {
+      if (node.getId() == nodeId) {
+        JSONObject nodeData = node.getData();
+        nodeData.set("isRunning", true);
+        nodeData.set("isFinished", false);
+        nodeData.set("hasError", false);
+        nodeData.set("isSkipped", false);
+      }
+    });
+
+    jsonData.set("nodes", nodes);
+    flowHis.setJsonData(jsonData);
+    flowHisMapper.updateById(flowHis);
+  }
+
+  private void resetExecStatus(long flowHisId) {
+    FlowHis flowHis = findById(flowHisId);
     JSONObject jsonData = flowHis.getJsonData();
     List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
 
