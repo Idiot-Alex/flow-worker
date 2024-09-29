@@ -71,6 +71,16 @@ public class FlowHisServiceTest extends WorkerAppTest {
   }
 
   @Test
+  void testRunWindows() {
+    long flowHisId = 1840207964489494528L;
+    FlowHis flowHis = flowHisService.findById(flowHisId);
+    log.info("flowHis: {}", JSONUtil.toJsonStr(flowHis));
+    flowHisService.run(flowHisId);
+    flowHis = flowHisService.findById(flowHisId);
+    log.info("executed flowHis: {}", JSONUtil.toJsonStr(flowHis));
+  }
+
+  @Test
   void testRun() {
     FlowHis flowHis = flowHisService.findById(1835606665463197696L);
     log.info("flowHis: {}", JSONUtil.toJsonStr(flowHis));

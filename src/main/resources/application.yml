@@ -25,5 +25,6 @@ pagehelper:
 
 logging:
   level:
-    org.mybatis: INFO
+    org.mybatis: ERROR
+    com.hotstrip.flow.worker.config.MybatisLogImpl: INFO
     com.hotstrip.flow.worker: DEBUG

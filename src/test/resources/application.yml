@@ -5,7 +5,7 @@ spring:
     baseline-on-migrate: true
 
   datasource:
-    url: jdbc:duckdb:db/flow.db
+    url: jdbc:duckdb:flow-worker/db/flow.db
     driver-class-name: org.duckdb.DuckDBDriver
 
 # mybatis
@@ -25,5 +25,6 @@ pagehelper:
 
 logging:
   level:
-    org.mybatis: INFO
+    org.mybatis: ERROR
+    com.hotstrip.flow.worker.config.MybatisLogImpl: INFO
     com.hotstrip.flow.worker: DEBUG

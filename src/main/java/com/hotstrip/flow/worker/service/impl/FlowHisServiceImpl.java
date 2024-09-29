@@ -1,32 +1,29 @@
 package com.hotstrip.flow.worker.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.hotstrip.flow.worker.model.ExecRes;
-import com.hotstrip.flow.worker.model.Node;
-import com.hotstrip.flow.worker.service.NodeService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.hotstrip.flow.worker.mapper.FlowHisMapper;
 import com.hotstrip.flow.worker.model.Flow;
 import com.hotstrip.flow.worker.model.FlowHis;
+import com.hotstrip.flow.worker.model.Node;
 import com.hotstrip.flow.worker.service.FlowHisService;
 import com.hotstrip.flow.worker.service.FlowService;
-
-import cn.hutool.core.util.IdUtil;
+import com.hotstrip.flow.worker.service.NodeService;
 import io.mybatis.common.core.Code;
 import io.mybatis.common.util.Assert;
 import io.mybatis.service.AbstractService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -87,7 +84,10 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
     // save node
     int orderNum = 0;
     for (Long nodeId : order) {
-      Node node = nodes.stream().filter(n -> nodeId.equals(n.getId())).findFirst().get();
+      Node node = nodes.stream()
+              .filter(n -> nodeId.equals(n.getId()))
+              .findFirst()
+              .orElseThrow(() -> new RuntimeException("node is not found"));
       log.info("node: {}", JSONUtil.toJsonStr(node));
       node.setFlowHisId(flowHisSaved.getId());
       node.setSeqNo(orderNum);
@@ -137,16 +137,17 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
     List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
 
     nodes.forEach(node -> {
-      if (node.getId() == executedNode.getId()) {
-//        node.setData(executedNode.getData());
-//        node = executedNode;
+      if (Objects.equals(node.getId(), executedNode.getId())) {
+        log.info("executed before: {}", node.getData().toJSONString(2));
         BeanUtil.copyProperties(executedNode, node);
+        log.info("executed after: {}",node.getData().toJSONString(2));
       }
     });
 
     jsonData.set("nodes", nodes);
     flowHis.setJsonData(jsonData);
     flowHisMapper.updateById(flowHis);
+    log.info("sync exec node status success, flowHisId: {}, nodeId: {}", flowHisId, executedNode.getId());
   }
 
   private void startExecNode(Long flowHisId, Long nodeId) {
@@ -155,7 +156,7 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
     List<Node> nodes = jsonData.getBeanList("nodes", Node.class);
 
     nodes.forEach(node -> {
-      if (node.getId() == nodeId) {
+      if (Objects.equals(node.getId(), nodeId)) {
         JSONObject nodeData = node.getData();
         nodeData.set("isRunning", true);
         nodeData.set("isFinished", false);
@@ -167,6 +168,7 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
     jsonData.set("nodes", nodes);
     flowHis.setJsonData(jsonData);
     flowHisMapper.updateById(flowHis);
+    log.info("start exec node success, flowHisId: {}, nodeId: {}", flowHisId, nodeId);
   }
 
   private void resetExecStatus(long flowHisId) {
@@ -190,6 +192,7 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
     flowHis.setEndAt(null);
 
     flowHisMapper.updateById(flowHis);
+    log.info("reset exec status success, flowHisId: {}", flowHisId);
   }
 
   private List<Node> getNodeListById(long id) {

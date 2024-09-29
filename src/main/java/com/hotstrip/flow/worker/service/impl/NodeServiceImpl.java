@@ -43,12 +43,13 @@ public class NodeServiceImpl extends AbstractService<Node, Long, NodeMapper> imp
         nodeData.set("isRunning", true);
         node.setData(nodeData);
         node = this.updateById(node);
+        log.info("node is running, id: {}, type: {}", node.getId(), node.getType());
 
         ExecRes execRes = new ExecRes();
         if (Arrays.asList(SKIP_NODE_TYPS).contains(node.getType())) {
             execRes.setCode(0);
             execRes.setOutput("skip this node");
-            log.info("skip this node type: {}", node.getType());
+            log.info("skip this node, id: {}, type: {}", node.getId(), node.getType());
             nodeData = node.getData();
             nodeData.set("isRunning", false);
             nodeData.set("isFinished", false);
@@ -87,6 +88,7 @@ public class NodeServiceImpl extends AbstractService<Node, Long, NodeMapper> imp
 
             String output = RuntimeUtil.execForStr(execCmd);
             log.info("output: {}", output);
+            log.info("node is running finished...id: {}, type: {}", node.getId(), node.getType());
             execRes.setCode(0);
             execRes.setOutput(output);
             nodeData = node.getData();
@@ -98,7 +100,7 @@ public class NodeServiceImpl extends AbstractService<Node, Long, NodeMapper> imp
             node.setData(nodeData);
             return this.updateById(node);
         } catch (Exception e) {
-            log.error("execCmd error: {}", e.getMessage(), e);
+            log.error("node is running error...message: {}, id: {}, type: {}", e.getMessage(), node.getId(), node.getType(), e);
             execRes.setCode(1);
             execRes.setOutput(e.getMessage());
             nodeData = node.getData();
