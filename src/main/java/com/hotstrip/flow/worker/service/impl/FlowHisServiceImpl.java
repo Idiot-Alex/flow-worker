@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.hotstrip.flow.worker.model.ExecRes;
@@ -137,7 +138,9 @@ public class FlowHisServiceImpl extends AbstractService<FlowHis, Long, FlowHisMa
 
     nodes.forEach(node -> {
       if (node.getId() == executedNode.getId()) {
-        node.setData(executedNode.getData());
+//        node.setData(executedNode.getData());
+//        node = executedNode;
+        BeanUtil.copyProperties(executedNode, node);
       }
     });
 

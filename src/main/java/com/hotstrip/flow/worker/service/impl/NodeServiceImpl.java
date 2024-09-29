@@ -51,7 +51,7 @@ public class NodeServiceImpl extends AbstractService<Node, Long, NodeMapper> imp
             log.info("skip this node type: {}", node.getType());
             nodeData = node.getData();
             nodeData.set("isRunning", false);
-            nodeData.set("isFinished", true);
+            nodeData.set("isFinished", false);
             nodeData.set("hasError", false);
             nodeData.set("isSkipped", true);
             nodeData.set("execRes",execRes);
