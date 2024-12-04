@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS "flow_his" (
   "updated_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 );
 
-CREATE UNIQUE INDEX unique_idx_flow_id_seq_no ON "flow_his" ("flow_id", "seq_no");
-CREATE INDEX idx_flow_id ON "flow_his" ("flow_id");
+CREATE UNIQUE INDEX IF NOT EXISTS unique_idx_flow_id_seq_no ON "flow_his" ("flow_id", "seq_no");
+CREATE INDEX IF NOT EXISTS idx_flow_id ON "flow_his" ("flow_id");
 
 CREATE TABLE IF NOT EXISTS "node" (
   "id" BIGINT PRIMARY KEY,
@@ -33,5 +33,5 @@ CREATE TABLE IF NOT EXISTS "node" (
 );
 
 -- flow_seq_no_view
-CREATE VIEW flow_seq_no_view AS 
+CREATE VIEW IF NOT EXISTS flow_seq_no_view AS
 SELECT flow_id, MAX(seq_no) as max_seq_no from flow_his group by flow_id;
